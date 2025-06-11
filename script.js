@@ -254,3 +254,31 @@ setInterval(updateCountdown, 86400000);
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
 }
+
+function warnIfFileProtocol() {
+    if (location.protocol === 'file:') {
+        alert('L\'application doit être lancée via \"npm start\" ou \"npm run open\" pour utiliser toutes les fonctionnalités.');
+    }
+}
+
+async function loadRSS() {
+    const url = document.getElementById('rss-url').value || 'https://www.lemonde.fr/rss/une.xml';
+    try {
+        const resp = await fetch(url);
+        const text = await resp.text();
+        const doc = new DOMParser().parseFromString(text, 'application/xml');
+        const items = Array.from(doc.querySelectorAll('item')).slice(0, 5);
+        const list = items.map(i => {
+            const title = i.querySelector('title')?.textContent || 'Sans titre';
+            const link = i.querySelector('link')?.textContent || '#';
+            return `<li><a href="${link}" target="_blank">${title}</a></li>`;
+        }).join('');
+        document.getElementById('rss-feed').innerHTML = list || 'Aucun article';
+    } catch (e) {
+        document.getElementById('rss-feed').innerText = 'Impossible de charger le flux';
+    }
+}
+
+document.getElementById('load-rss').addEventListener('click', loadRSS);
+
+warnIfFileProtocol();

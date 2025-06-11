@@ -30,10 +30,10 @@
 
     <section id="fichiers">
         <h2>Gestion des fichiers</h2>
-        <button id="create-folder">Créer un dossier</button>
-        <button id="choose-dir">Choisir dossier principal</button>
+        <button class="btn" id="create-folder">Créer un dossier</button>
+        <button class="btn" id="choose-dir">Choisir dossier principal</button>
         <input type="file" id="file-input" multiple style="display:none;">
-        <button id="import-files" disabled>Importer des fichiers</button>
+        <button class="btn" id="import-files" disabled>Importer des fichiers</button>
         <div id="file-status"></div>
     </section>
 
@@ -50,7 +50,7 @@
             </label>
             <label>Date <input type="date" id="ticket-date"></label>
             <label>Heure <input type="time" id="ticket-time"></label>
-            <button id="import-ticket">Importer le billet PDF</button>
+            <button class="btn" id="import-ticket">Importer le billet PDF</button>
             <input type="file" id="ticket-file" accept="application/pdf" style="display:none;">
         </div>
         <table id="tickets-table">
@@ -68,7 +68,7 @@
         <div>
             <label>Solde au <input type="date" id="balance-date"></label>
             <input type="number" id="initial-balance" placeholder="Solde initial">
-            <button id="set-balance">Définir</button>
+            <button class="btn" id="set-balance">Définir</button>
         </div>
         <div id="finance-input">
             <h3>Saisie</h3>
@@ -81,7 +81,7 @@
             </label>
             <label>Libellé: <input type="text" id="entry-label"></label>
             <label>Montant: <input type="number" id="entry-amount"></label>
-            <button id="add-entry">Ajouter</button>
+            <button class="btn" id="add-entry">Ajouter</button>
         </div>
         <table id="finance-table">
             <thead>
@@ -96,7 +96,7 @@
             <select id="conv-from"></select>
             <span>→</span>
             <select id="conv-to"></select>
-            <button id="convert-currency">Convertir</button>
+            <button class="btn" id="convert-currency">Convertir</button>
             <div id="conv-result"></div>
         </div>
     </section>
@@ -104,7 +104,7 @@
     <section id="notes">
         <h2>Notes</h2>
         <textarea id="note-text" rows="4" cols="50" placeholder="Votre note..."></textarea><br>
-        <button id="export-note">Exporter la note</button>
+        <button class="btn" id="export-note">Exporter la note</button>
     </section>
 
     <section id="liens">
@@ -117,8 +117,10 @@
         </ul>
     </section>
     <section id="actualites">
-        <h2>Actualités Asie</h2>
-        <p>Flux RSS configurable par l'utilisateur.</p>
+        <h2>Actualités</h2>
+        <input type="url" id="rss-url" placeholder="URL du flux RSS" />
+        <button class="btn" id="load-rss">Charger</button>
+        <ul id="rss-feed"></ul>
     </section>
 
     <section id="agenda">
