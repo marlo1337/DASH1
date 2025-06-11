@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suivi de Voyage en Asie</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { margin-bottom: 20px; }
+        .section h2 { margin-bottom: 10px; }
+        #weather, #news, #visa { border: 1px solid #ccc; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Suivi de Voyage</h1>
+
+    <div class="section">
+        <label for="city">Ville:</label>
+        <input type="text" id="city" placeholder="Entrer une ville">
+        <label for="country">Pays:</label>
+        <input type="text" id="country" placeholder="Entrer un pays">
+        <button onclick="updateInfo()">Mettre à jour</button>
+    </div>
+
+    <div id="weather" class="section">
+        <h2>Météo</h2>
+        <div id="weather-content">Aucune donnée</div>
+    </div>
+
+    <div id="news" class="section">
+        <h2>Actualités</h2>
+        <div id="news-content">Aucune donnée</div>
+    </div>
+
+    <div id="visa" class="section">
+        <h2>Visa</h2>
+        <div id="visa-content">Aucune donnée</div>
+    </div>
+
+    <script>
+        async function updateInfo() {
+            const city = document.getElementById('city').value;
+            const country = document.getElementById('country').value;
+            if (!city || !country) return;
+
+            updateWeather(city);
+            updateNews(country);
+            updateVisa(country);
+        }
+
+        async function updateWeather(city) {
+            // Utilise l'API de géocodage d'Open-Meteo pour obtenir les coordonnées
+            const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}`;
+            const geoResponse = await fetch(geoUrl);
+            const geoData = await geoResponse.json();
+            if (!geoData.results || geoData.results.length === 0) {
+                document.getElementById('weather-content').innerText = 'Ville non trouvée';
+                return;
+            }
+            const { latitude, longitude } = geoData.results[0];
+
+            // Utilise les coordonnées pour récupérer les prévisions
+            const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
+            const weatherResponse = await fetch(weatherUrl);
+            const weatherData = await weatherResponse.json();
+            if (weatherData && weatherData.current_weather) {
+                const w = weatherData.current_weather;
+                document.getElementById('weather-content').innerText =
+                    `Température: ${w.temperature}°C, Vent: ${w.windspeed} km/h`;
+            } else {
+                document.getElementById('weather-content').innerText = 'Aucune donnée météo';
+            }
+        }
+
+        async function updateNews(country) {
+            const apiKey = 'VOTRE_CLE_NEWSAPI';
+            const url = `https://newsapi.org/v2/top-headlines?country=${country.toLowerCase()}&apiKey=${apiKey}`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data.articles) {
+                    const list = data.articles.slice(0, 5).map(a => `<li><a href="${a.url}" target="_blank">${a.title}</a></li>`).join('');
+                    document.getElementById('news-content').innerHTML = `<ul>${list}</ul>`;
+                } else {
+                    document.getElementById('news-content').innerText = 'Aucune nouvelle';
+                }
+            } catch (err) {
+                document.getElementById('news-content').innerText = 'Erreur de chargement des actualités';
+            }
+        }
+
+        async function updateVisa(country) {
+            // Exemple basique - remplacer par un appel à une véritable API ou base de données
+            document.getElementById('visa-content').innerText = `Consultez les exigences de visa pour ${country} sur un site spécialisé.`;
+        }
+    </script>
+</body>
+</html>
