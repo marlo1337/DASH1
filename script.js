@@ -154,6 +154,24 @@ try {
 let rootDirHandle;
 let docsDirHandle;
 
+async function createFolder() {
+    if (!window.showDirectoryPicker) {
+        document.getElementById("file-status").innerText = "API non supportée";
+        return;
+    }
+    const name = prompt('Nom du dossier ?');
+    if (!name) return;
+    try {
+        const handle = await window.showDirectoryPicker();
+        docsDirHandle = await handle.getDirectoryHandle(name, { create: true });
+        rootDirHandle = docsDirHandle;
+        document.getElementById("file-status").innerText = `Dossier \"${name}\" créé`;
+        document.getElementById("import-files").disabled = false;
+    } catch (e) {
+        document.getElementById("file-status").innerText = "Échec création dossier";
+    }
+}
+
 async function chooseDirectory() {
 if (!window.showDirectoryPicker) {
     document.getElementById("file-status").innerText = "API non supportée";
@@ -188,6 +206,7 @@ input.click();
 }
 
 document.getElementById("choose-dir").addEventListener("click", chooseDirectory);
+document.getElementById("create-folder").addEventListener("click", createFolder);
 document.getElementById("import-files").addEventListener("click", importFiles);
 document.getElementById('import-ticket').addEventListener('click', importTicket);
 
