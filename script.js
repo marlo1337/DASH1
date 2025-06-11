@@ -156,6 +156,7 @@ let docsDirHandle;
 
 async function createFolder() {
     if (!window.showDirectoryPicker) {
+        alert("Cette fonctionnalité n'est pas supportée par votre navigateur.");
         document.getElementById("file-status").innerText = "API non supportée";
         return;
     }
