@@ -4,7 +4,8 @@
   "description": "Ce dépôt contient un exemple de tableau de bord de voyage minimal en HTML.",
   "main": "script.js",
   "scripts": {
-    "test": "node finance.test.js"
+    "test": "node finance.test.js",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",

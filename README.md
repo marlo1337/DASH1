@@ -23,4 +23,8 @@ Pour exécuter les tests unitaires :
 npm test
 ```
 
-Ouvrez `index.html` dans votre navigateur pour visualiser la page.
+Pour lancer le projet en local et activer l'API File System Access, démarrez le serveur puis ouvrez `http://localhost:8000` dans votre navigateur :
+
+```bash
+npm start
+```
