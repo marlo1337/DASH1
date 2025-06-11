@@ -3,96 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suivi de Voyage en Asie</title>
+    <title>Tableau de bord voyage</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .section { margin-bottom: 20px; }
-        .section h2 { margin-bottom: 10px; }
-        #weather, #news, #visa { border: 1px solid #ccc; padding: 10px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+        header {
+            background: #003366;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            max-width: 900px;
+            margin: auto;
+            padding: 1rem;
+        }
+        section {
+            background: white;
+            border: 1px solid #ccc;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        ul {
+            padding-left: 1.2rem;
+        }
     </style>
 </head>
 <body>
-    <h1>Suivi de Voyage</h1>
+<header>
+    <h1>Mon tableau de bord</h1>
+</header>
+<main>
+    <section id="dashboard">
+        <h2>Dashboard</h2>
+        <div>
+            <strong>Météo à Bangkok:</strong> <span id="weather-content">--</span>
+        </div>
+        <div>
+            <strong>Jours avant départ:</strong> <span id="days-left">--</span>
+        </div>
+        <div>
+            <strong>Prochains événements:</strong>
+            <ul id="events"></ul>
+        </div>
+        <div>
+            <strong>Solde de trésorerie:</strong> <span id="cash-balance">--</span>
+        </div>
+    </section>
 
-    <div class="section">
-        <label for="city">Ville:</label>
-        <input type="text" id="city" placeholder="Entrer une ville">
-        <label for="country">Pays:</label>
-        <input type="text" id="country" placeholder="Entrer un pays">
-        <button onclick="updateInfo()">Mettre à jour</button>
-    </div>
+    <section id="voyage">
+        <h2>Voyage</h2>
+        <ul>
+            <li>Suivi des billets d'avion (import manuel ou via e-mail)</li>
+            <li>Notifications de changements de vol</li>
+            <li>Détail des étapes : escales, horaires, compagnies</li>
+        </ul>
+    </section>
 
-    <div id="weather" class="section">
-        <h2>Météo</h2>
-        <div id="weather-content">Aucune donnée</div>
-    </div>
+    <section id="finance">
+        <h2>Finance</h2>
+        <ul>
+            <li>Trésorerie manuelle ou import CSV</li>
+            <li>Dépenses/recettes catégorisées</li>
+            <li>Graphiques simples pour visualiser les flux</li>
+            <li>Suivi des marchés boursiers et cryptomonnaies via API</li>
+        </ul>
+    </section>
 
-    <div id="news" class="section">
-        <h2>Actualités</h2>
-        <div id="news-content">Aucune donnée</div>
-    </div>
+    <section id="notes">
+        <h2>Notes</h2>
+        <ul>
+            <li>Bloc-notes local avec tri par tags ou dates</li>
+            <li>Enregistrement de pense-bêtes et to-do lists</li>
+        </ul>
+    </section>
 
-    <div id="visa" class="section">
-        <h2>Visa</h2>
-        <div id="visa-content">Aucune donnée</div>
-    </div>
+    <section id="liens">
+        <h2>Liens utiles</h2>
+        <ul>
+            <li>Raccourcis personnalisables (Ambassade, Google Translate, Grab…)</li>
+            <li>Organisation par catégories : Transport, Santé, Visa, Logement…</li>
+        </ul>
+    </section>
 
-    <script>
-        async function updateInfo() {
-            const city = document.getElementById('city').value;
-            const country = document.getElementById('country').value;
-            if (!city || !country) return;
+    <section id="actualites">
+        <h2>Actualités Asie</h2>
+        <p>Flux RSS configurable par l'utilisateur.</p>
+    </section>
 
-            updateWeather(city);
-            updateNews(country);
-            updateVisa(country);
-        }
+    <section id="agenda">
+        <h2>Agenda</h2>
+        <ul>
+            <li>Synchronisation avec votre calendrier Apple</li>
+            <li>Ajout, modification et suppression d'événements</li>
+        </ul>
+    </section>
 
-        async function updateWeather(city) {
-            // Utilise l'API de géocodage d'Open-Meteo pour obtenir les coordonnées
-            const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}`;
-            const geoResponse = await fetch(geoUrl);
-            const geoData = await geoResponse.json();
-            if (!geoData.results || geoData.results.length === 0) {
-                document.getElementById('weather-content').innerText = 'Ville non trouvée';
-                return;
-            }
-            const { latitude, longitude } = geoData.results[0];
+    <section id="applications">
+        <h2>Applications recommandées</h2>
+        <p>Liste interactive d'apps utiles (Google Maps, Wise, Revolut…)</p>
+    </section>
 
-            // Utilise les coordonnées pour récupérer les prévisions
-            const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
-            const weatherResponse = await fetch(weatherUrl);
-            const weatherData = await weatherResponse.json();
-            if (weatherData && weatherData.current_weather) {
-                const w = weatherData.current_weather;
-                document.getElementById('weather-content').innerText =
-                    `Température: ${w.temperature}°C, Vent: ${w.windspeed} km/h`;
-            } else {
-                document.getElementById('weather-content').innerText = 'Aucune donnée météo';
-            }
-        }
+    <section id="langue">
+        <h2>Langue</h2>
+        <ul>
+            <li>Mini dictionnaire hors-ligne ou accès rapide à une API de traduction</li>
+            <li>Phrases essentielles pré-enregistrées</li>
+        </ul>
+    </section>
 
-        async function updateNews(country) {
-            const apiKey = 'VOTRE_CLE_NEWSAPI';
-            const url = `https://newsapi.org/v2/top-headlines?country=${country.toLowerCase()}&apiKey=${apiKey}`;
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                if (data.articles) {
-                    const list = data.articles.slice(0, 5).map(a => `<li><a href="${a.url}" target="_blank">${a.title}</a></li>`).join('');
-                    document.getElementById('news-content').innerHTML = `<ul>${list}</ul>`;
-                } else {
-                    document.getElementById('news-content').innerText = 'Aucune nouvelle';
-                }
-            } catch (err) {
-                document.getElementById('news-content').innerText = 'Erreur de chargement des actualités';
-            }
-        }
+    <section id="documents">
+        <h2>Documents</h2>
+        <ul>
+            <li>Stockage sécurisé (visa, passeport, assurance) avec chiffrement local</li>
+        </ul>
+    </section>
 
-        async function updateVisa(country) {
-            // Exemple basique - remplacer par un appel à une véritable API ou base de données
-            document.getElementById('visa-content').innerText = `Consultez les exigences de visa pour ${country} sur un site spécialisé.`;
-        }
-    </script>
+    <section id="offline">
+        <h2>Mode hors-ligne</h2>
+        <p>Accès aux informations critiques même sans internet.</p>
+    </section>
+
+    <section id="urgence">
+        <h2>Bouton Urgence</h2>
+        <p>
+            Accès rapide aux numéros d'urgence et à un message pré-rempli pour vos contacts.
+        </p>
+    </section>
+
+    <section id="sante">
+        <h2>Santé et sécurité</h2>
+        <ul>
+            <li>Liste des hôpitaux recommandés, vaccins requis, pharmacies proches</li>
+            <li>Informations médicales à compléter par l'utilisateur</li>
+        </ul>
+    </section>
+
+    <section id="humeur">
+        <h2>Humeur / Journal express</h2>
+        <p>Noter rapidement votre état émotionnel du jour.</p>
+    </section>
+
+    <section id="parametres">
+        <h2>Paramètres</h2>
+        <ul>
+            <li>Personnalisation des notifications</li>
+            <li>Mode sombre / clair</li>
+            <li>Réinitialisation des données</li>
+            <li>Import/export de sauvegarde</li>
+        </ul>
+    </section>
+</main>
+<script>
+const departureDate = new Date('2024-12-01');
+const events = [
+    { date: '2024-06-10', title: 'Réserver logement' },
+    { date: '2024-06-20', title: 'Vaccination' }
+];
+const cashBalance = 1500; // Exemple de montant en EUR
+
+async function updateWeather() {
+    const city = 'Bangkok';
+    const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}`;
+    const geoResponse = await fetch(geoUrl);
+    const geoData = await geoResponse.json();
+    if (!geoData.results || geoData.results.length === 0) {
+        document.getElementById('weather-content').innerText = 'Ville non trouvée';
+        return;
+    }
+    const { latitude, longitude } = geoData.results[0];
+    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
+    const weatherResponse = await fetch(weatherUrl);
+    const weatherData = await weatherResponse.json();
+    if (weatherData && weatherData.current_weather) {
+        const w = weatherData.current_weather;
+        document.getElementById('weather-content').innerText = `Température: ${w.temperature}°C, Vent: ${w.windspeed} km/h`;
+    }
+}
+
+function updateCountdown() {
+    const today = new Date();
+    const diff = Math.ceil((departureDate - today) / (1000 * 60 * 60 * 24));
+    document.getElementById('days-left').innerText = diff;
+}
+
+function loadEvents() {
+    const list = events.map(e => `<li>${e.date} - ${e.title}</li>`).join('');
+    document.getElementById('events').innerHTML = list;
+}
+
+function loadCash() {
+    document.getElementById('cash-balance').innerText = cashBalance + ' €';
+}
+
+updateWeather();
+updateCountdown();
+loadEvents();
+loadCash();
+</script>
 </body>
 </html>
