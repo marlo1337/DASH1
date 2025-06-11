@@ -1,0 +1,13 @@
+{
+  "name": "dash1",
+  "version": "1.0.0",
+  "description": "Ce dépôt contient un exemple de tableau de bord de voyage minimal en HTML.",
+  "main": "script.js",
+  "scripts": {
+    "test": "node finance.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
