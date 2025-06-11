@@ -156,6 +156,13 @@
             <li>Stockage sécurisé (visa, passeport, assurance) avec chiffrement local</li>
         </ul>
     </section>
+    <section id="fichiers">
+        <h2>Gestion des fichiers</h2>
+        <button id="choose-dir">Choisir dossier principal</button>
+        <input type="file" id="file-input" multiple style="display:none;">
+        <button id="import-files" disabled>Importer des fichiers</button>
+        <div id="file-status"></div>
+    </section>
 
     <section id="offline">
         <h2>Mode hors-ligne</h2>
@@ -294,6 +301,41 @@ async function convertCurrency() {
         document.getElementById('conv-result').innerText = 'Erreur conversion';
     }
 }
+let rootDirHandle;
+let docsDirHandle;
+
+async function chooseDirectory() {
+    try {
+        const handle = await window.showDirectoryPicker();
+        rootDirHandle = await handle.getDirectoryHandle("DASH", { create: true });
+        docsDirHandle = await rootDirHandle.getDirectoryHandle("documents", { create: true });
+        document.getElementById("file-status").innerText = "Dossier prêt";
+        document.getElementById("import-files").disabled = false;
+    } catch (e) {
+        document.getElementById("file-status").innerText = "Échec sélection dossier";
+    }
+}
+
+async function importFiles() {
+    if (!docsDirHandle) return;
+    const input = document.getElementById("file-input");
+    input.onchange = async () => {
+        const files = Array.from(input.files);
+        for (const file of files) {
+            const fh = await docsDirHandle.getFileHandle(file.name, { create: true });
+            const writable = await fh.createWritable();
+            await writable.write(file);
+            await writable.close();
+        }
+        document.getElementById("file-status").innerText = files.length + " fichier(s) importé(s)";
+        input.value = "";
+    };
+    input.click();
+}
+
+document.getElementById("choose-dir").addEventListener("click", chooseDirectory);
+document.getElementById("import-files").addEventListener("click", importFiles);
+
 
 document.getElementById('convert-currency').addEventListener('click', convertCurrency);
 document.getElementById('export-note').addEventListener('click', () => {
