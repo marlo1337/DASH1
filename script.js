@@ -13,6 +13,7 @@ async function loadEventsData() {
 let entries = JSON.parse(localStorage.getItem('financeEntries') || '[]');
 let currentBalance = parseFloat(localStorage.getItem('currentBalance') || '0');
 let darkMode = localStorage.getItem('darkMode') === 'true';
+let tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
 
 async function updateWeather() {
 const city = 'Bangkok';
@@ -62,6 +63,40 @@ entries = [];
 localStorage.setItem('currentBalance', currentBalance);
 localStorage.setItem('financeEntries', JSON.stringify(entries));
 renderFinance();
+}
+
+function renderTickets() {
+    const tbody = document.getElementById('tickets-table').querySelector('tbody');
+    tbody.innerHTML = tickets.map(t =>
+        `<tr class="ticket-row"><td>${t.type}</td><td>${t.date}</td><td>${t.time}</td><td>${t.file}</td></tr>`
+    ).join('');
+}
+
+async function importTicket() {
+    if (!docsDirHandle) {
+        alert('Choisissez d\'abord le dossier principal dans Gestion des fichiers');
+        return;
+    }
+    const input = document.getElementById('ticket-file');
+    input.onchange = async () => {
+        const file = input.files[0];
+        const type = document.getElementById('ticket-type').value;
+        const date = document.getElementById('ticket-date').value;
+        const time = document.getElementById('ticket-time').value;
+        if (!file || !date || !time) {
+            alert('Veuillez renseigner la date, l\'heure et sélectionner un fichier');
+            return;
+        }
+        const fh = await docsDirHandle.getFileHandle(file.name, { create: true });
+        const writable = await fh.createWritable();
+        await writable.write(file);
+        await writable.close();
+        tickets.push({ type, date, time, file: file.name });
+        localStorage.setItem('tickets', JSON.stringify(tickets));
+        renderTickets();
+        input.value = '';
+    };
+    input.click();
 }
 
 function addEntry() {
@@ -154,6 +189,7 @@ input.click();
 
 document.getElementById("choose-dir").addEventListener("click", chooseDirectory);
 document.getElementById("import-files").addEventListener("click", importFiles);
+document.getElementById('import-ticket').addEventListener('click', importTicket);
 
 
 document.getElementById('convert-currency').addEventListener('click', convertCurrency);
@@ -191,6 +227,7 @@ updateWeather();
 updateCountdown();
 loadEvents();
 renderFinance();
+renderTickets();
 applyDarkMode();
 updateNetworkStatus();
 setInterval(updateCountdown, 86400000);

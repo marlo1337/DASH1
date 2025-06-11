@@ -17,7 +17,7 @@ body {
 }
 
 header {
-    background: var(--header-bg);
+    background: linear-gradient(135deg, var(--header-bg), #0077cc);
     color: #fff;
     padding: 1rem;
     text-align: center;
@@ -49,6 +49,15 @@ ul {
 table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
 th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
 input, select, button, textarea { margin-top: 0.5rem; }
+.ticket-row td { font-size: 0.9rem; }
+#ticket-form label { display: block; margin-top: 0.5rem; }
+
+.section-image {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
 
 body.dark {
     --bg-color: #1c1c1c;
@@ -56,4 +65,8 @@ body.dark {
     --header-bg: #000;
     --section-bg: #333;
     --border-color: #555;
+}
+
+body.dark header {
+    background: linear-gradient(135deg, #000, #222);
 }
