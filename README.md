@@ -10,6 +10,7 @@ Les fichiers sont désormais séparés :
 La fonction de gestion de dossier local utilise l'API File System Access. Si elle n'est pas disponible, un message s'affiche et l'import de fichiers est désactivé.
 
 Un service worker (`sw.js`) met en cache les ressources principales afin de permettre un affichage basique hors ligne.
+Un commutateur permet d'activer un **mode sombre** et l'état de connexion est affiché.
 
 Pour exécuter les tests unitaires :
 

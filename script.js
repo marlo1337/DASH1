@@ -12,6 +12,7 @@ async function loadEventsData() {
 }
 let entries = JSON.parse(localStorage.getItem('financeEntries') || '[]');
 let currentBalance = parseFloat(localStorage.getItem('currentBalance') || '0');
+let darkMode = localStorage.getItem('darkMode') === 'true';
 
 async function updateWeather() {
 const city = 'Bangkok';
@@ -156,6 +157,11 @@ document.getElementById("import-files").addEventListener("click", importFiles);
 
 
 document.getElementById('convert-currency').addEventListener('click', convertCurrency);
+document.getElementById('dark-toggle').addEventListener('change', e => {
+    darkMode = e.target.checked;
+    localStorage.setItem('darkMode', darkMode);
+    applyDarkMode();
+});
 document.getElementById('export-note').addEventListener('click', () => {
 const text = document.getElementById('note-text').value;
 const date = new Date().toISOString().slice(0,10);
@@ -167,11 +173,27 @@ a.click();
 URL.revokeObjectURL(a.href);
 });
 
+function applyDarkMode() {
+    document.body.classList.toggle('dark', darkMode);
+    document.getElementById('dark-toggle').checked = darkMode;
+}
+
+function updateNetworkStatus() {
+    const el = document.getElementById('network-status');
+    if (el) el.innerText = navigator.onLine ? 'En ligne' : 'Hors ligne';
+}
+
+window.addEventListener('online', updateNetworkStatus);
+window.addEventListener('offline', updateNetworkStatus);
+
 populateCurrencies();
 updateWeather();
 updateCountdown();
 loadEvents();
 renderFinance();
+applyDarkMode();
+updateNetworkStatus();
+setInterval(updateCountdown, 86400000);
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
 }
