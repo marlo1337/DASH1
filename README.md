@@ -28,3 +28,9 @@ Pour lancer le projet en local et activer l'API File System Access, démarrez le
 ```bash
 npm start
 ```
+
+Vous pouvez également lancer le serveur via le script `start.sh` situé à la racine du projet :
+
+```bash
+./start.sh
+```
